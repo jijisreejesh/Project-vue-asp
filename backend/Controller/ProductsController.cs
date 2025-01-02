@@ -13,16 +13,16 @@ namespace dotnet_practice.Controller
     public class ProductsController : ControllerBase
     {
         // GET api/products
-        // [HttpGet]
-        // [Route("productList")]
-        // public IEnumerable<Product> Get()
-        // {
-        //     using var connection = DBContext.GetConnection();
-        //     var sql = "SELECT * FROM product";
-        //     var products = connection.Query<Product>(sql);
+        [HttpGet]
+        [Route("productList")]
+        public IEnumerable<Product> Get()
+        {
+            using var connection = DBContext.GetConnection();
+            var sql = "SELECT * FROM Product";
+            var products = connection.Query<Product>(sql);
 
-        //     return products;
-        // }
+            return products;
+        }
 
         // //GET single product
         // [HttpGet]

@@ -5,7 +5,7 @@ import { useProductStore } from '../stores/product';
 import { storeToRefs } from "pinia";
 const store = useProductStore();
 const { productArray,singleProduct} = storeToRefs(store);
-const {saveProduct}=store;
+const {saveProduct,retrieveProducts}=store;
 const dialog = ref(false);
 const dialogDelete = ref(false);
 const editedIndex = ref(-1);
@@ -16,13 +16,6 @@ const formTitle = computed(() => {
 const closeProduct = () => {
   dialog.value = false;
   editedIndex.value = -1;
-  // composition.value = {
-  //   material: "",
-  //   count: 0,
-  //   weight: 0,
-  //   price: 0,
-  //   purity: "",
-  // };
 };
 const closeDeleteProductDialog = () => {
   dialogDelete.value = false;
@@ -81,7 +74,9 @@ const headers = [
   { title: "Price", key: "price" },
   { title: "QuantityInStock", key: "quantityInStock" },
 ];
-
+onMounted(()=>{
+retrieveProducts();
+});
 </script>
 
 <template>

@@ -11,22 +11,23 @@ export const useProductStore = defineStore("product", () => {
     price: 0,
     quantityInStock: 0,
   });
-  // const retrieveProducts=async()=>{
-  //     try{
-  //   const res=await axios.get('/api/productList');
-  // }
-  // catch(err){
-  //   console.log("Error : " + err);
-  // }
-  // }
+  const retrieveProducts = async () => {
+    try {
+      const res = await axios.get("/api/Products/productList");
+      console.log(res.data);
+    }
+    catch (err) {
+      console.log("Error : " + err);
+    }
+  }
 
   const saveProduct = async () => {
     try {
-      const res = await axios.post("/api/AddProduct", singleProduct.value);
+      const res = await axios.post("/api/Products/AddProduct", singleProduct.value);
       console.log("Successfull insertion : " + res.data);
     } catch (err) {
       console.log("Error : " + err);
     }
   };
-  return { ProductArray, singleProduct, saveProduct };
+  return { ProductArray, singleProduct, saveProduct, retrieveProducts };
 });
