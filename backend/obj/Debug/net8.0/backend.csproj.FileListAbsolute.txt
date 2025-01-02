@@ -116,3 +116,5 @@
 /home/user/jiji/project1/backend/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
 /home/user/jiji/project1/backend/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
 /home/user/jiji/project1/backend/bin/Debug/net8.0/Npgsql.dll
+/home/user/jiji/project1/backend/bin/Debug/net8.0/Dapper.dll
+/home/user/jiji/project1/backend/obj/Debug/net8.0/backend.sourcelink.json

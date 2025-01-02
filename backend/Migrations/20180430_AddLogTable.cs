@@ -2,7 +2,7 @@ using FluentMigrator;
 //using FluentMigrator.Postgres;
 namespace backend{
 
-    [Migration(2025010102)]
+    [Migration(2025010103)]
     public class AddLogTable1 : Migration
     {
         public override void Up()

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "qIAhSu0GqfCxq6+ar3iC1rwb82XFTPSZnJCbcNFQppzm5MFWKVXcQ+PkQHR5qwEN9DrwgKXFrrswVZUf1KpPVw==",
+  "dgSpecHash": "smoJtosv5S2hJZ4p5dxmDtXFvo00S0oI3eI9XUzCdJB6TN9HmOYL/ckQqMkkFp2r7QV6ZPU695weTgOeBNJP6g==",
   "success": true,
   "projectFilePath": "/home/user/jiji/project1/backend/backend.csproj",
   "expectedPackageFiles": [
     "/home/user/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/home/user/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
+    "/home/user/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",
     "/home/user/.nuget/packages/firebirdsql.data.firebirdclient/10.3.1/firebirdsql.data.firebirdclient.10.3.1.nupkg.sha512",
     "/home/user/.nuget/packages/fluentmigrator/6.2.0/fluentmigrator.6.2.0.nupkg.sha512",
     "/home/user/.nuget/packages/fluentmigrator.abstractions/6.2.0/fluentmigrator.abstractions.6.2.0.nupkg.sha512",
