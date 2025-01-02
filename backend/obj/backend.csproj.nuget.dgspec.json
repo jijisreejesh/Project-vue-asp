@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/user/jiji/project1/backend/backend.csproj": {}
+    "/home/descpro/Desktop/JIJI/jiji-bacup/jiji/project1/backend/backend.csproj": {}
   },
   "projects": {
-    "/home/user/jiji/project1/backend/backend.csproj": {
+    "/home/descpro/Desktop/JIJI/jiji-bacup/jiji/project1/backend/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/user/jiji/project1/backend/backend.csproj",
+        "projectUniqueName": "/home/descpro/Desktop/JIJI/jiji-bacup/jiji/project1/backend/backend.csproj",
         "projectName": "backend",
-        "projectPath": "/home/user/jiji/project1/backend/backend.csproj",
-        "packagesPath": "/home/user/.nuget/packages/",
-        "outputPath": "/home/user/jiji/project1/backend/obj/",
+        "projectPath": "/home/descpro/Desktop/JIJI/jiji-bacup/jiji/project1/backend/backend.csproj",
+        "packagesPath": "/home/descpro/.nuget/packages/",
+        "outputPath": "/home/descpro/Desktop/JIJI/jiji-bacup/jiji/project1/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/user/.nuget/NuGet/NuGet.Config"
+          "/home/descpro/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -94,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.111/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

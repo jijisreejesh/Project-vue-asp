@@ -5,5 +5,5 @@ public class Product
 	public string Category { get; set; }		
     public string Description{get;set;}
     public int Price{get;set;}
-    public int Quantity_In_Stock{get;set;}
+    public int QuantityInStock{get;set;}
 }
