@@ -17,11 +17,17 @@ namespace dotnet_practice.Controller
         [Route("productList")]
         public IEnumerable<Product> Get()
         {
-            using var connection = DBContext.GetConnection();
-            var sql = "SELECT * FROM Product";
+            try{
+                using var connection = DBContext.GetConnection();
+            var sql = "SELECT * FROM Product ORDER BY id";
             var products = connection.Query<Product>(sql);
-
+            Console.WriteLine(products);
             return products;
+            }
+            catch(Exception er){
+                 Console.WriteLine ($"error :{er} ");
+                 return Enumerable.Empty<Product>();
+            }
         }
 
         // //GET single product
@@ -60,7 +66,7 @@ namespace dotnet_practice.Controller
                     category = product.Category,
                     description = product.Description,
                     price = product.Price,
-                    quantityInStock = product.QuantityInStock
+                    quantityInStock = product.Quantity_In_Stock
                 });
                 if (result > 0)
                 {
@@ -74,51 +80,52 @@ namespace dotnet_practice.Controller
             }
         }
 
-        // [HttpPut]
-        // [Route("edit/{product_id}")]
-        // public IActionResult EditProduct(int product_id, [FromBody] Product product)
-        // {
-        //     if (product == null)
-        //     {
-        //         return BadRequest("Product Data required");
-        //     }
-        //     try
-        //     {
-        //         using var connection = DBContext.GetConnection();
-        //         var sql = "UPDATE product SET product_name=@Product_Name,category=@Category,description=@Description,price=@Price,quantity_in_stock=@Quantity_In_Stock where product_id=@product_id";
-        //         var result = connection.Execute(sql, new
-        //         {
-        //             product_id = product.Id,
-        //             product_name = product.Name,
-        //             category = product.Category,
-        //             description = product.Description,
-        //             price = product.Price,
-        //             quantity_in_stock = product.Quantity_In_Stock
-        //         });
-        //         if (result > 0)
-        //         {
-        //             return Ok("Product successfully Edited");
-        //         }
-        //         return StatusCode(500, "Failed to update product");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode(500, $"Internal server error: {ex.Message}");
-        //     }
+        [HttpPut]
+        [Route("edit")]
+        public IActionResult EditProduct([FromBody] Product product)
+        {
+            if (product == null)
+            {
+                return BadRequest("Product Data required");
+            }
+            try
+            {
+                using var connection = DBContext.GetConnection();
+                var sql = "UPDATE Product SET name=@name,category=@category,description=@description,price=@price,quantity_in_stock=@quantityInStock  where id=@id";
+                var result = connection.Execute(sql, new
+                {
+                    id = product.Id,
+                    name = product.Name,
+                    category = product.Category,
+                    description = product.Description,
+                    price = product.Price,
+                    quantityInStock = product.Quantity_In_Stock
+                });
+                if (result > 0)
+                {
+                    return Ok("Product successfully Edited");
+                }
+                return StatusCode(500, "Failed to update product");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
 
-        // }
-        // [HttpDelete]
-        // [Route("delete/{product_id}")]
-        // public IActionResult DeleteProduct(int product_id){
-        //     using var connection=DBContext.GetConnection();
-        //     var sql="DELETE FROM Product WHERE product_id=@product_id";
-        //     var result=connection.Execute(sql,new {Id=product_id});
-        //     if(result>0)
-        //     {
-        //         return Ok("Product successfully added");
-        //     }
-        //     return NotFound("Product not found");
-        // }
+        }
+
+        [HttpDelete]
+        [Route("delete/{product_id}")]
+        public IActionResult DeleteProduct(int product_id){
+            using var connection=DBContext.GetConnection();
+            var sql="DELETE FROM Product WHERE id=@id";
+            var result=connection.Execute(sql,new {id=product_id});
+            if(result>0)
+            {
+                return Ok("Product successfully Deleted");
+            }
+            return NotFound("Product not found");
+        }
     }
 }
 

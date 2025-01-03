@@ -6,22 +6,45 @@ using Npgsql;
 using System;
 using Dapper;
 using System.Security.AccessControl;
+using backend.Models;
 
-namespace dotnet_practice.Controller{
+namespace dotnet_practice.Controller
+{
       [ApiController]
     [Route("api/[controller]")]
     public class CustomerController:ControllerBase
     {
 
-
         [HttpGet]
         [Route("getdata")]
         public IEnumerable<Customer>Get()
         {
+            try{
             using var connection=DBContext.GetConnection();
-            var sql="SELECT * FROM Customer";
+            var sql="SELECT * FROM Customer ORDER BY id";
             var customerDetails=connection.Query<Customer>(sql);
             return customerDetails;
+            }
+            catch(Exception er){
+                 Console.WriteLine ($"error :{er} ");
+                 return Enumerable.Empty<Customer>();
+            }
+        }
+
+        [HttpGet]
+        [Route("getCustomerList")]
+        public IEnumerable<AutocompleteModel>GetCustomerList()
+        {
+            try{
+            using var connection=DBContext.GetConnection();
+            var sql=$"SELECT id, name as Label FROM Customer ORDER BY id";
+            var customerDetails=connection.Query<AutocompleteModel>(sql);
+            return customerDetails;
+            }
+            catch(Exception er){
+                 Console.WriteLine ($"error :{er} ");
+                 return Enumerable.Empty<AutocompleteModel>();
+            }
         }
 
 
@@ -35,9 +58,8 @@ namespace dotnet_practice.Controller{
             }
             try{
                 using var connection=DBContext.GetConnection();
-                var sql="INSERT INTO Customer(customer_id,name,phone,email,city)values(@Customer_Id,@Name,@Phone,@Email,@City)";
+                var sql="INSERT INTO Customer(name,phone,email,city)values(@Name,@Phone,@Email,@City)";
                 var result=connection.Execute(sql,new{
-                    customer_id=customer.Id,
                     name=customer.Name,
                     phone=customer.Phone,
                     email=customer.Email,
@@ -56,8 +78,8 @@ namespace dotnet_practice.Controller{
         }
 
         [HttpPut]
-        [Route("Edit/{customer_id}")]
-        public IActionResult UpdateCustomer(int customer_id,[FromBody]Customer customer)
+        [Route("Edit")]
+        public IActionResult UpdateCustomer([FromBody]Customer customer)
         {
              if (customer == null)
             {
@@ -65,9 +87,9 @@ namespace dotnet_practice.Controller{
             }
             try{
             using var connection=DBContext.GetConnection();
-            var sql="UPDATE Customer SET customer_id=@customer_id,name=@Name,phone=@Phone,email=@Email,city=@City WHERE customer_id=@Customer_Id";
+            var sql="UPDATE Customer SET name=@name,phone=@phone,email=@email,city=@city WHERE id=@id";
             var result=connection.Execute(sql,new{
-                    customer_id=customer.Id,
+                    id=customer.Id,
                     name=customer.Name,
                     phone=customer.Phone,
                     email=customer.Email,
@@ -90,7 +112,7 @@ namespace dotnet_practice.Controller{
         [Route("Delete/{customer_id}")]
         public IActionResult DeleteCustomer(int customer_id){
            using var connection=DBContext.GetConnection();
-           var sql="DELETE FROM customer where customer_id=@customer_id";
+           var sql="DELETE FROM customer where id=@id";
            var result=connection.Execute(sql,new {Id=customer_id});
            if(result>0)
            {

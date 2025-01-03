@@ -39,6 +39,7 @@ class Program
                                     builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                                 });
             });
+            
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
