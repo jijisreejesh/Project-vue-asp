@@ -14,7 +14,7 @@ const singleProduct = ref({
   });
 const tableItems = ref([]);
 const tableHeaders = [
-  { title: "Id,", key: "id" },
+  // { title: "Id,", key: "id" },
   { title: "Name", key: "name" },
   { title: "Category", key: "category" },
   { title: "Description", key: "description" },

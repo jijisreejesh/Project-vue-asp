@@ -7,7 +7,7 @@ using System;
 using Dapper;
 using System.Security.AccessControl;
 
-namespace dotnet_practice.Controller
+namespace backend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]

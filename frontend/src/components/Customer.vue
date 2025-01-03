@@ -11,7 +11,7 @@ const customer = ref({
   });
 const tableItems = ref([]);
 const tableHeaders = [
-  { title: "Id,", key: "id" },
+  // { title: "Id,", key: "id" },
   { title: "Name", key: "name" },
   { title: "Phone", key: "phone" },
   { title: "Email", key: "email" },
