@@ -1,3 +1,4 @@
+namespace backend.Models;
 public class Sales{
     public int Id{get;set;}
     public int Customer_Id{get;set;}
@@ -11,4 +12,5 @@ public class Sales{
 
 public class SalesViewModel : Sales {
     public string CustomerName { get; set; }
+    public string ProductName { get; set; }
 }

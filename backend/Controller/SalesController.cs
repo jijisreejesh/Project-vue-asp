@@ -6,7 +6,7 @@ using Npgsql;
 using System;
 using Dapper;
 using System.Security.AccessControl;
-
+using backend.Models;
 namespace backend.Controller
 {
     [ApiController]
@@ -19,7 +19,15 @@ namespace backend.Controller
         public IEnumerable<SalesViewModel> Get()
         {
             using var connection = DBContext.GetConnection();
-            var sql = "SELECT * FROM sales ORDER BY id";
+          //  var sql = "SELECT * FROM salesViewModel ORDER BY id";
+           var sql = @"
+        SELECT 
+            s.*, 
+            c.name AS customerName, 
+            p.name AS productName
+        FROM sales s
+        INNER JOIN customer c ON s.customer_id = c.id
+        INNER JOIN product p ON s.product_id = p.id ORDER BY id";
             var sales = connection.Query<SalesViewModel>(sql);
 
             return sales;

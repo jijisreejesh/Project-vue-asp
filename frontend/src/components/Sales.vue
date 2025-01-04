@@ -1,26 +1,30 @@
 <script setup>
-import { onMounted, ref ,computed} from "vue";
+import { onMounted, ref} from "vue";
 import axios from "../services/axios.js";
 import Shop from './Shop.vue';
+import dayjs from "dayjs";
 const sales = ref({
     id: 0,
-    customer_id: "",
-    product_id: "",
-    quantity: "",
-    total_price:"",
-    sales_date:"",
-    payment_method:"",
-    status:""
+    customer_Id: 0,
+    product_Id: 0,
+    quantity: 0,
+    total_Price:0,
+    sales_Date:"",
+    payment_Method:"",
+    status:"",
+    customerName:"",
+    productName:""
   });
+  const customerIdAndName=ref([]);
+  const productIdAndName=ref([]);
 const tableItems = ref([]);
 const tableHeaders = [
-  { title: "Id,", key: "id" },
-  { title: "Customer_Id", key: "Customer_id" },
-  { title: "Product_Id", key: "product_id" },
+  { title: "Customer_Name", key: "customerName" },
+  { title: "Product_Name", key: "productName" },
   { title: "Quantity", key: "quantity" },
-  { title: "Total_Price", key: "total_price" },
-  { title: "Sales_Date", key: "sales_date" },
-  { title: "Payment_Method", key: "payment_method"},
+  { title: "Total_Price", key: "total_Price" },
+  { title: "Sales_Date", key: "sales_Date" ,value:({sales_Date})=>{ return dayjs(sales_Date).format('YYYY-MM-DD')}},
+  { title: "Payment_Method", key: "payment_Method"},
   { title: "status", key:"status"},
   { title: "Actions", key: "actions" }
 ];
@@ -33,24 +37,52 @@ const retrievedDetails = async () => {
         tableItems.value = res.data;
       } else {
         console.log("Non-200 response:", res.status);
+      }
+      const customerDetails=await axios.get("api/Customer/getCustomerList");  
+      if (customerDetails.status === 200) {
+        customerIdAndName.value = customerDetails.data;
+      } else {
+        console.log("Non-200 response:", customerDetails.status);
+    }
+    const productDetails=await axios.get("api/Products/getProductList");  
+      if (productDetails.status === 200) {
+        productIdAndName.value = productDetails.data;
+      } else {
+        console.log("Non-200 response:", productDetails.status);
     }
     editedIndex.value=-1;
     sales.value = {
-        id: 0,
-    customer_id: "",
-    product_id: "",
-    quantity: "",
-    total_price:"",
-    sales_date:"",
-    payment_method:"",
-    status:""
+      id: 0,
+    customer_Id: 0,
+    product_Id: 0,
+    quantity: 0,
+    total_Price:0,
+    sales_Date:"",
+    payment_Method:"",
+    status:"",
+    customerName:"",
+    productName:""
   };
   }
     catch (err) {
       console.log("Error : " + err);
     }
   }
-
+const reset=()=>{
+  editedIndex.value=-1;
+    sales.value = {
+      id: 0,
+    customer_Id: 0,
+    product_Id: 0,
+    quantity: 0,
+    total_Price:0,
+    sales_Date:"",
+    payment_Method:"",
+    status:"",
+    customerName:"",
+    productName:""
+  };
+}
   const editItemDetails=(item,index)=>{
    sales.value={...item};
     editedIndex.value=index;
@@ -58,7 +90,9 @@ const retrievedDetails = async () => {
 
   const saveSales = async () => {
     try {
-     
+      sales.value.sales_Date = new Date(sales.value.sales_Date); 
+      // console.log(sales.value);
+     sales.value.sales_Date=new Date(sales.value.sales_Date);
   if (editedIndex.value === -1) {
     await axios.post("/api/Sales/AddSales", sales.value);
   } else {
@@ -74,7 +108,7 @@ const retrievedDetails = async () => {
 
   const deleteSales=async(item)=>{
     try {
-    const res = await axios.delete(`/api/Customer/Delete/${item.id}`);
+    const res = await axios.delete(`/api/Sales/Delete/${item.id}`);
     console.log(res.data);
   } catch (err) {
     console.log("Error : " + err);
@@ -91,29 +125,60 @@ const retrievedDetails = async () => {
     <Shop 
     :headers="tableHeaders" 
     :items="tableItems"
-    formTitle="Customer Form"
+    formTitle="Sales Form"
     @save="saveSales"
     @edit="editItemDetails"
      @delete="deleteSales"
+     @cancel="reset"
      >
      <template #itemDetails>
      <v-container>
-                <!-- <v-row>
-                  <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="customer.name" 
-                      label="Customer Name"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="customer.phone" 
-                      label="Phone Number"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="customer.email"  label="Email"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="customer.city" label="City"></v-text-field>
-                  </v-col>
-                </v-row> -->
+      <v-row>
+        <v-col cols="12" md="4" sm="6">
+          <v-autocomplete
+            label="Select Customer"
+           v-model="sales.customer_Id"
+           :items="customerIdAndName" 
+           item-title="label"
+           item-value="id"
+          ></v-autocomplete>
+      </v-col>
+      <v-col cols="12" md="4" sm="6">
+          <v-autocomplete
+            label="Select Product"
+           v-model="sales.product_Id"
+           :items="productIdAndName" 
+           item-title="label"
+           item-value="id"
+          ></v-autocomplete>
+      </v-col>
+      <v-col cols="12" md="4" sm="6">
+      <v-text-field v-model="sales.quantity" type="Number"
+          label="Quantity"></v-text-field>
+         </v-col>
+         <v-col cols="12" md="4" sm="6">
+      <v-text-field v-model="sales.total_Price" type="Number"
+          label="TotalPrice"></v-text-field>
+         </v-col>
+      <v-col cols="12" md="4" sm="6">
+      <v-text-field v-model="sales.sales_Date" 
+          label="Sales_Date"></v-text-field>
+         </v-col> 
+         <v-col cols="12" md="4" sm="6">
+                    <v-select
+                      label="Select PaymentMethod"
+                      v-model="sales.payment_Method"
+                      :items="[
+                        'Card',
+                        'Cash',
+                      ]"
+                    ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="4" sm="6">
+                      <v-text-field v-model="sales.status"
+                      label="Status"></v-text-field>
+                      </v-col>
+      </v-row>
               </v-container>
             </template>
 </Shop>

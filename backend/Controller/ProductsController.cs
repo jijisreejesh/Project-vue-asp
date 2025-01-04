@@ -5,7 +5,7 @@ using System.Linq;
 using Npgsql;
 using System;
 using Dapper;
-
+using backend.Models;
 namespace backend.Controller
 {
     [ApiController]
@@ -43,6 +43,24 @@ namespace backend.Controller
         //     return Ok(result);
            
         // }
+
+
+        [HttpGet]
+        [Route("getProductList")]
+        public IEnumerable<AutocompleteModel>GetProductList()
+        {
+            try{
+            using var connection=DBContext.GetConnection();
+            var sql=$"SELECT id, name as Label FROM Product ORDER BY id";
+            var productDetails=connection.Query<AutocompleteModel>(sql);
+            return productDetails;
+            }
+            catch(Exception er){
+                 Console.WriteLine ($"error :{er} ");
+                 return Enumerable.Empty<AutocompleteModel>();
+            }
+        }
+
 
         //insert api/products
         [HttpPost]

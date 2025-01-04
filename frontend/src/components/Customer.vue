@@ -23,7 +23,7 @@ const editedIndex = ref(-1);
 const retrievedDetails = async () => {
     try {
       const res = await axios.get("/api/Customer/getData");
-      console.log("Customers:", res);
+      console.log("Customers:", res.data);
       if (res.status === 200) {
         tableItems.value = res.data;
       } else {

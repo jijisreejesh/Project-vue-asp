@@ -1,16 +1,18 @@
 <script setup>
-import Product from './components/Product.vue';
-import Customer from './components/Customer.vue'
-import Sales from './components/Sales.vue'
+import { RouterLink,RouterView } from 'vue-router';
+
 </script>
 
 <template>
-  <!-- <Product/> -->
-  <!-- <Customer/> -->
-  <Sales/>
+   <RouterLink class="links" to="/product">Products</RouterLink>
+  <RouterLink class="links" to="/customer">Customer</RouterLink> 
+  <RouterLink class="links" to="/sales">Sales</RouterLink>
+  <RouterView></RouterView>
   
 </template>
 
 <style scoped>
-
+.links{
+  margin: 30px;
+}
 </style>
