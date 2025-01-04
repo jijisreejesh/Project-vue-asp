@@ -5,12 +5,15 @@ const props = defineProps({
     headers:Array,
     items:Array,
     formTitle:String,
-    dialogDelete:Object
+ 
 });
+const search = ref("");
+const page=ref(1);
+const itemsPerPage=ref(10)
+// Form state
+const formRef = ref(null);
+const isFormValid = ref(false);
 
-// const formTitle = computed(() => {
-//   return editedIndex.value === -1 ? "New Item" : "Edit Item";
-// });
 const emit=defineEmits(["save","edit","delete","cancel"]);
 const editedIndex = ref(-1);
 const showDialog=ref(false);
@@ -39,18 +42,47 @@ const deleteItemConfirm=()=>{
     emit("delete",selectedItem.value)
     dialogDelete.value=false;
 }
-const save=()=>{
+const saveData=()=>{
+  validateForm();
+  if (isFormValid.value) {
     emit("save");
     closeDialog();
+  } else {
+    console.log("Form is invalid, cannot save.");
+  }
 }
+// Form methods
+const validateForm = () => {
+  if (formRef.value) {
+    formRef.value.validate();
+  }}
 
 </script>
 
 <template>
-  <v-data-table :headers="headers" :items="items" class="ma-5">
+  <v-text-field
+      v-model="search"
+      label="Search"
+      prepend-inner-icon="mdi-magnify"
+      variant="outlined"
+      hide-details
+      single-line
+      class="ma-7"
+    ></v-text-field>
+
+  <v-data-table :headers="headers" :items="items" 
+  v-model:page="page"
+  :search="search"
+  :items-per-page="itemsPerPage"
+   class="ma-5">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title class="ma-3">Items</v-toolbar-title>
+        <v-toolbar-title class="ma-3">{{formTitle}}</v-toolbar-title>
+
+        <v-form
+        ref="formRef"
+        v-model="isFormValid"
+      >
         <v-dialog v-model="showDialog" max-width="500px">
     <v-card>
       <v-card-title>
@@ -63,11 +95,12 @@ const save=()=>{
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue-darken-1" variant="text" @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue-darken-1" variant="text" @click="save">Save</v-btn>
+        <v-btn color="blue-darken-1"
+     @click="saveData">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-
+  </v-form>
 
         <v-btn color="primary" dark @click="showDialog=true">
             New Item

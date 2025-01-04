@@ -23,7 +23,7 @@ const tableHeaders = [
   { title: "Product_Name", key: "productName" },
   { title: "Quantity", key: "quantity" },
   { title: "Total_Price", key: "total_Price" },
-  { title: "Sales_Date", key: "sales_Date" ,value:({sales_Date})=>{ return dayjs(sales_Date).format('YYYY-MM-DD')}},
+  { title: "Sales_Date", key: "sales_Date" ,value:({sales_Date})=>{ return dayjs(sales_Date).format('DD-MM-YYYY')}},
   { title: "Payment_Method", key: "payment_Method"},
   { title: "status", key:"status"},
   { title: "Actions", key: "actions" }
@@ -50,19 +50,7 @@ const retrievedDetails = async () => {
       } else {
         console.log("Non-200 response:", productDetails.status);
     }
-    editedIndex.value=-1;
-    sales.value = {
-      id: 0,
-    customer_Id: 0,
-    product_Id: 0,
-    quantity: 0,
-    total_Price:0,
-    sales_Date:"",
-    payment_Method:"",
-    status:"",
-    customerName:"",
-    productName:""
-  };
+   reset();
   }
     catch (err) {
       console.log("Error : " + err);
@@ -85,14 +73,14 @@ const reset=()=>{
 }
   const editItemDetails=(item,index)=>{
    sales.value={...item};
+   sales.value.sales_Date = dayjs(sales.value.sales_Date).format("YYYY-MM-DD")
     editedIndex.value=index;
   }
 
   const saveSales = async () => {
     try {
-      sales.value.sales_Date = new Date(sales.value.sales_Date); 
-      // console.log(sales.value);
-     sales.value.sales_Date=new Date(sales.value.sales_Date);
+    //  sales.value.sales_Date = new Date(sales.value.sales_Date); 
+   
   if (editedIndex.value === -1) {
     await axios.post("/api/Sales/AddSales", sales.value);
   } else {
@@ -141,6 +129,7 @@ const reset=()=>{
            :items="customerIdAndName" 
            item-title="label"
            item-value="id"
+            :rules="[v => !!v || 'Item is required']"
           ></v-autocomplete>
       </v-col>
       <v-col cols="12" md="4" sm="6">
@@ -150,19 +139,23 @@ const reset=()=>{
            :items="productIdAndName" 
            item-title="label"
            item-value="id"
+            :rules="[v => !!v || 'Item is required']"
           ></v-autocomplete>
       </v-col>
       <v-col cols="12" md="4" sm="6">
       <v-text-field v-model="sales.quantity" type="Number"
+       :rules="[v => !!v || 'Item is required']"
           label="Quantity"></v-text-field>
          </v-col>
          <v-col cols="12" md="4" sm="6">
       <v-text-field v-model="sales.total_Price" type="Number"
+       :rules="[v => !!v || 'Item is required']"
           label="TotalPrice"></v-text-field>
          </v-col>
-      <v-col cols="12" md="4" sm="6">
-      <v-text-field v-model="sales.sales_Date" 
-          label="Sales_Date"></v-text-field>
+      <v-col cols="12"  sm="6">
+      <v-text-field v-model="sales.sales_Date" type="date" 
+       :rules="[v => !!v || 'Item is required']"
+          label="Sales_Date" ></v-text-field>
          </v-col> 
          <v-col cols="12" md="4" sm="6">
                     <v-select
@@ -172,10 +165,12 @@ const reset=()=>{
                         'Card',
                         'Cash',
                       ]"
+                       :rules="[v => !!v || 'Item is required']"
                     ></v-select>
                     </v-col>
                     <v-col cols="12" md="4" sm="6">
                       <v-text-field v-model="sales.status"
+                       :rules="[v => !!v || 'Item is required']"
                       label="Status"></v-text-field>
                       </v-col>
       </v-row>

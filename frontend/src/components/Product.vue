@@ -33,15 +33,7 @@ const retrieveProducts = async () => {
       } else {
         console.log("Non-200 response:", res.status);
     }
-    editedIndex.value=-1;
-    singleProduct.value = {
-        id:0,
-        name:"",
-        category:"",
-        description:"",
-        price:0,
-        quantity_In_Stock:0
-  };
+   reset();
   }
     catch (err) {
       console.log("Error : " + err);
@@ -78,10 +70,21 @@ const retrieveProducts = async () => {
   }
   await retrieveProducts();
   }
-
+  const reset=()=>{
+  editedIndex.value=-1;
+  singleProduct.value = {
+        id:0,
+        name:"",
+        category:"",
+        description:"",
+        price:0,
+        quantity_In_Stock:0
+  };
+}
   onMounted(async()=>{
     await retrieveProducts();
   })
+ 
 </script>
 
 <template>
@@ -92,17 +95,20 @@ const retrieveProducts = async () => {
     @save="saveProduct"
     @edit="editItemDetails"
      @delete="deleteProduct"
+     @cancel="reset"
      >
      <template #itemDetails>
      <v-container>
                 <v-row>
                   <v-col cols="12" md="4" sm="6">
                     <v-text-field v-model="singleProduct.name" 
+                     :rules="[v => !!v || 'Item is required']"
                       label="Product Name"></v-text-field>
                   </v-col>
                   <v-col cols="12" md="4" sm="6">
                     <v-select
                       label="Select Category"
+                       :rules="[v => !!v || 'Item is required']"
                       v-model="singleProduct.category"
                       :items="[
                         'Soap',
@@ -115,14 +121,19 @@ const retrieveProducts = async () => {
                   <v-col cols="12">
                     <v-textarea
                       v-model="singleProduct.description"
+                       :rules="[v => !!v || 'Item is required']"
                       label="Description"
                     ></v-textarea>
                     </v-col>
                   <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="singleProduct.price" type="Number" label="Price"></v-text-field>
+                    <v-text-field v-model="singleProduct.price" type="Number" 
+                    :rules="[v => !!v || 'Item is required']"
+                    label="Price"></v-text-field>
                   </v-col>
                   <v-col cols="12" md="4" sm="6">
-                    <v-text-field v-model="singleProduct.quantity_In_Stock" type="Number"  label="Quantity In Stock"></v-text-field>
+                    <v-text-field v-model="singleProduct.quantity_In_Stock" 
+                     :rules="[v => !!v || 'Item is required']"
+                    type="Number"  label="Quantity In Stock"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
