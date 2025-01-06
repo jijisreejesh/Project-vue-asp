@@ -48,12 +48,12 @@ const saveData = () => {
   validateForm();
   if (isFormValid.value) {
     emit("save");
+    closeDialog();
     alertMessage.value="Successful"
   } else {
-    console.log("Form is invalid, cannot save.");
+    console.log("Something went wrong")
     alertMessage.value="Something went wrong"
   }
-  closeDialog();
   snackbar.value=true;
 };
 // Form methods
@@ -120,15 +120,7 @@ const validateForm = () => {
                   > 
                     <v-btn color="blue-darken-1" @click="saveData">Save</v-btn>
                     
-                  <v-snackbar v-model="snackbar">
-                   {{ alertMessage }}
-                    <template  v-slot:actions>
-                      <v-btn color="pink" variant="text" @click="snackbar = false">
-                        Close
-                      </v-btn>
-                    </template> 
-                                  
-                  </v-snackbar>
+                 
               
 
                 </v-card-actions>
@@ -179,6 +171,16 @@ const validateForm = () => {
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-snackbar v-model="snackbar" timeout="5000">
+                   {{ alertMessage }}
+                    <template  v-slot:actions>
+                      <v-btn color="pink" variant="text" @click="snackbar = false">
+                        Close
+                      </v-btn>
+                    </template> 
+                                  
+                  </v-snackbar>
 </template>
 
 <style>

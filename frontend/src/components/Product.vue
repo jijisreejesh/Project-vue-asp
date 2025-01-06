@@ -53,8 +53,8 @@ const saveProduct = async () => {
   } catch (err) {
     console.log("Error : " + err);
   }
-  reset();
   await retrieveProducts();
+  reset();
 };
 
 const deleteProduct = async (item) => {
