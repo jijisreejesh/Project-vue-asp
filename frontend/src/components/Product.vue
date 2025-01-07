@@ -5,12 +5,13 @@ import Shop from "./Shop.vue";
 
 const singleProduct = ref({
   id: 0,
-  name:null,
+  name: null,
   category: null,
   description: null,
   price: null,
   quantity_In_Stock: null,
 });
+const alertMsg = ref("");
 const tableItems = ref([]);
 const tableHeaders = [
   // { title: "Id,", key: "id" },
@@ -24,7 +25,6 @@ const tableHeaders = [
 const editedIndex = ref(-1);
 
 const retrieveProducts = async () => {
-
   try {
     const res = await axios.get("/api/Products/productList");
     console.log("Products:", res);
@@ -59,16 +59,19 @@ const saveProduct = async () => {
 
 const deleteProduct = async (item) => {
   try {
-    const res = await axios.delete(`/api/Products/delete/${item.id}`);
-    console.log(res.data);
+        const res = await axios.delete(`/api/Products/delete/${item.id}`);
+        alertMsg.value="Successfully deleted"
+    
   } catch (err) {
     console.log("Error : " + err);
+    alertMsg.value = "Not possible to delete this product";
   }
   reset();
   await retrieveProducts();
 };
 const reset = () => {
   editedIndex.value = -1;
+  alertMsg.value=null;
   singleProduct.value = {
     id: 0,
     name: null,
@@ -88,6 +91,7 @@ onMounted(async () => {
     :headers="tableHeaders"
     :items="tableItems"
     formTitle="Product Form"
+    :alertMessage1="alertMsg"
     @save="saveProduct"
     @edit="editItemDetails"
     @delete="deleteProduct"
@@ -96,7 +100,7 @@ onMounted(async () => {
     <template #itemDetails>
       <v-container>
         <v-row>
-          <v-col cols="12"  sm="6">
+          <v-col cols="12" sm="6">
             <v-text-field
               v-model="singleProduct.name"
               :rules="[(v) => !!v || 'Field required']"
@@ -129,7 +133,7 @@ onMounted(async () => {
               label="Price"
             ></v-text-field>
           </v-col>
-          <v-col cols="12"  sm="6">
+          <v-col cols="12" sm="6">
             <v-text-field
               v-model="singleProduct.quantity_In_Stock"
               type="text"

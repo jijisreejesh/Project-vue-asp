@@ -44,23 +44,28 @@ const retrievedDetails = async () => {
     } else {
       console.log("Non-200 response:", res.status);
     }
-    const customerDetails = await axios.get("api/Customer/getCustomerList");
-    if (customerDetails.status === 200) {
-      customerIdAndName.value = customerDetails.data;
-    } else {
-      console.log("Non-200 response:", customerDetails.status);
-    }
-    const productDetails = await axios.get("api/Products/getProductList");
-    if (productDetails.status === 200) {
-      productIdAndName.value = productDetails.data;
-    } else {
-      console.log("Non-200 response:", productDetails.status);
-    }
     reset();
   } catch (err) {
     console.log("Error : " + err);
   }
 };
+const productNameList=async()=>{
+
+  const productDetails = await axios.get("api/Products/getProductList");
+    if (productDetails.status === 200) {
+      productIdAndName.value = productDetails.data;
+    } else {
+      console.log("Non-200 response:", productDetails.status);
+    }
+}
+const customerNameList=async()=>{
+  const customerDetails = await axios.get("api/Customer/getCustomerList");
+    if (customerDetails.status === 200) {
+      customerIdAndName.value = customerDetails.data;
+    } else {
+      console.log("Non-200 response:", customerDetails.status);
+    }
+}
 const reset = () => {
   editedIndex.value = -1;
   sales.value = {
@@ -132,6 +137,7 @@ onMounted(async () => {
               :items="customerIdAndName"
               item-title="label"
               item-value="id"
+              @focus="customerNameList"
               :rules="[(v) => !!v || 'Field required']"
             ></v-autocomplete>
           </v-col>
@@ -140,6 +146,7 @@ onMounted(async () => {
               label="Select Product"
               v-model="sales.product_Id"
               :items="productIdAndName"
+              @focus="productNameList"
               item-title="label"
               item-value="id"
               :rules="[(v) => !!v || 'Field required']"

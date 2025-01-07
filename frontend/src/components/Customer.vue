@@ -9,7 +9,7 @@ const customer = ref({
   email: "",
   city: "",
 });
-
+const alertMsg=ref('');
 const tableItems = ref([]);
 const tableHeaders = [
   { title: "Name", key: "name" },
@@ -29,7 +29,6 @@ const retrievedDetails = async () => {
     } else {
       console.log("Non-200 response:", res.status);
     }
-    reset();
   } catch (err) {
     console.log("Error : " + err);
   }
@@ -51,18 +50,24 @@ const saveCustomer = async () => {
     console.log("Error : " + err);
   }
   await retrievedDetails();
+  reset();
 };
 
 const deleteCustomer = async (item) => {
   try {
-    const res = await axios.delete(`/api/Customer/Delete/${item.id}`);
-    console.log(res.data);
+        const res = await axios.delete(`/api/Customer/Delete/${item.id}`);
+        alertMsg.value="Successfully deleted"
+     
   } catch (err) {
     console.log("Error : " + err);
+    alertMsg.value = "Not possible to delete this customer";
+
   }
   await retrievedDetails();
+  reset();
 };
 const reset = () => {
+  alertMsg.value=null;
   editedIndex.value = -1;
   customer.value = {
     id: 0,
@@ -98,6 +103,7 @@ const phoneRules= [
     :headers="tableHeaders"
     :items="tableItems"
     formTitle="Customer Form"
+    :alertMessage1="alertMsg"
     @save="saveCustomer"
     @edit="editItemDetails"
     @delete="deleteCustomer"

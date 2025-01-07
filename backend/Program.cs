@@ -7,6 +7,8 @@ using FluentMigrator.Runner.Initialization;
 using Npgsql;
 using Microsoft.Extensions.DependencyInjection;
 using FluentMigrator.Runner.Conventions;
+using backend.Interfaces;
+using backend.Services;
 namespace backend;
 class Program
 {
@@ -15,6 +17,9 @@ class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddTransient<IProductService, ProductService>();
+            builder.Services.AddTransient<ICustomerService ,CustomerService>();
+            builder.Services.AddTransient<ISalesService,SalesService>();
             builder.Services.AddFluentMigratorCore()
                 .AddSingleton<IConventionSet>(new DefaultConventionSet("jiji", null))
                 .ConfigureRunner(rb => rb
@@ -31,6 +36,7 @@ class Program
                 .AddLogging(lb => lb.AddFluentMigratorConsole());
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",

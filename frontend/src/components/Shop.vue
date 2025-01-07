@@ -5,6 +5,7 @@ const props = defineProps({
   headers: Array,
   items: Array,
   formTitle: String,
+  alertMessage1:String
 });
 const search = ref("");
 
@@ -43,6 +44,9 @@ const showDeleteDialog = (item) => {
 const deleteItemConfirm = () => {
   emit("delete", selectedItem.value);
   dialogDelete.value = false;
+  snackbar.value=true;
+  alertMessage.value=props.alertMessage1;
+  console.log(alertMessage.value);
 };
 const saveData = () => {
   validateForm();
