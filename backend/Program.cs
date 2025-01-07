@@ -16,10 +16,15 @@ class Program
     {
         try
         {
+            //creates a builder for setting up a web application (likely using ASP.NET Core).
             var builder = WebApplication.CreateBuilder(args);
+
+            // Dependency Injection Setup
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<ICustomerService ,CustomerService>();
             builder.Services.AddTransient<ISalesService,SalesService>();
+
+            // FluentMigrator Setup
             builder.Services.AddFluentMigratorCore()
                 .AddSingleton<IConventionSet>(new DefaultConventionSet("jiji", null))
                 .ConfigureRunner(rb => rb
@@ -31,12 +36,15 @@ class Program
                     .WithRunnerConventions(new MigrationRunnerConventions())
                     // Define the assembly containing the migrations
                     .ScanIn(typeof(AddLogTable1).Assembly).For.Migrations())
-
                 // Enable logging to console in the FluentMigrator way
                 .AddLogging(lb => lb.AddFluentMigratorConsole());
-            builder.Services.AddControllers();
-            builder.Services.AddSwaggerGen();
+
+            // Controller and Swagger Setup
+            builder.Services.AddControllers();//allowing the application to respond to HTTP requests.
+            builder.Services.AddSwaggerGen();//Registers Swagger to generate API documentation.
             
+
+            //Cross-Origin Resource Sharing (CORS) Configuration
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -46,18 +54,20 @@ class Program
                                 });
             });
             
+            //Building and Running the Application
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwagger();// Enables Swagger to expose the API documentation.
+                app.UseSwaggerUI();//Configures Swagger UI to view and test the API.
             }
-            app.UseCors("AllowAll");
-            app.UseHttpsRedirection();
-            app.MapControllers();
+            app.UseCors("AllowAll");//Enables the CORS policy.
+            app.UseHttpsRedirection();//Redirects HTTP requests to HTTPS.
+            app.MapControllers();//Maps routes to the controllers.
 
-            using var scope = app.Services.CreateScope();
-            UpdateDatabase(scope.ServiceProvider);
+            //Database Migration
+            using var scope = app.Services.CreateScope();//creates a scope for dependency injection (DI). Scoped services are created and disposed of within the scope
+            UpdateDatabase(scope.ServiceProvider);//Calls the UpdateDatabase method to run migrations.
 
             app.Run();
         }
@@ -109,7 +119,8 @@ class Program
         // Instantiate the runner with the custom connection
         var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
-        // Execute the migrations
+        // runs all pending migrations to upgrade the database schema.
+
         runner.MigrateUp();
     }
 
