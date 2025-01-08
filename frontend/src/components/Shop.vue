@@ -5,12 +5,12 @@ const props = defineProps({
   headers: Array,
   items: Array,
   formTitle: String,
-  alertMessage1:String
+  alertMessage1: String,
 });
 const search = ref("");
 
 const snackbar = ref(false);
-const alertMessage=ref('');
+const alertMessage = ref("");
 
 const itemsPerPage = ref(10);
 // Form state
@@ -44,8 +44,8 @@ const showDeleteDialog = (item) => {
 const deleteItemConfirm = () => {
   emit("delete", selectedItem.value);
   dialogDelete.value = false;
-  snackbar.value=true;
-  alertMessage.value=props.alertMessage1;
+  snackbar.value = true;
+  alertMessage.value = props.alertMessage1;
   console.log(alertMessage.value);
 };
 const saveData = () => {
@@ -53,12 +53,12 @@ const saveData = () => {
   if (isFormValid.value) {
     emit("save");
     closeDialog();
-    alertMessage.value="Successful"
+    alertMessage.value = "Successful";
   } else {
-    console.log("Something went wrong")
-    alertMessage.value="Something went wrong"
+    console.log("Something went wrong");
+    alertMessage.value = "Something went wrong";
   }
-  snackbar.value=true;
+  snackbar.value = true;
 };
 // Form methods
 const validateForm = () => {
@@ -121,12 +121,8 @@ const validateForm = () => {
                   <v-spacer></v-spacer>
                   <v-btn color="blue-darken-1" variant="text" @click="closeDialog"
                     >Cancel</v-btn
-                  > 
-                    <v-btn color="blue-darken-1" @click="saveData">Save</v-btn>
-                    
-                 
-              
-
+                  >
+                  <v-btn color="blue-darken-1" @click="saveData">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -177,14 +173,11 @@ const validateForm = () => {
   </v-dialog>
 
   <v-snackbar v-model="snackbar" timeout="5000">
-                   {{ alertMessage }}
-                    <template  v-slot:actions>
-                      <v-btn color="pink" variant="text" @click="snackbar = false">
-                        Close
-                      </v-btn>
-                    </template> 
-                                  
-                  </v-snackbar>
+    {{ alertMessage }}
+    <template v-slot:actions>
+      <v-btn color="pink" variant="text" @click="snackbar = false"> Close </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <style>
